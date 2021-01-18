@@ -1,0 +1,17 @@
+
+label{
+    font-weight: bolder;
+}
+
+input, textarea, select{
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+#titulo{
+    font-family: garamond;
+    font-size:  400%;
+}
+
+body{
+    background-color: rgba(0, 0, 0, 0.2);
+}
