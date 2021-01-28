@@ -17,26 +17,6 @@
 
 <body> 
 
-    <!--Modal-->
-    <div class="modal fade" tabindex="-1" id="delete_modal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="/delete/id_registro" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">EXCLUIR REGISTRO</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Deseja realmente excluir o Registro?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">Excluir</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
     <!--Barra de Navegação-->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
@@ -95,7 +75,7 @@
                             <td class="actions" align="center">
                                 <form method="GET" action="">
                                     <a class="btn btn-dark btn-sm" href="pag_estoque">Movimentação</a>
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="document.getElementById('{{p.registro}}')" data-bs-toggle="modal" data-bs-target="#delete_modal">Excluir</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" formmethod="POST" formaction="/delete/{{ p.cod_registro }}">Excluir</button>
                                 </form>
                             </td>   
                         </tr>
