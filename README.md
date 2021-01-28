@@ -1,16 +1,16 @@
 # Gerenciador de Estoque
  Desafio de criar um projeto de front, back e banco de dados de um Gerenciador de Estoque.
 
-[ ] Colocar projeto no github
-[ ] Aplicar Modal ao botão excluir e faze-lo funcionar
-[ ] Botão ao clicar no botão movimento terá um auto select do produto
-[ ] Auto incremento do No de registro
-[ ] Validação no Back-end
-[ ] DB que armezene o histórico de movimentação
-[ ] botão DETALHES para mostrar a descrição e o histórico
+- [ ] Colocar projeto no github.
+- [ ] Aplicar Modal ao botão excluir e faze-lo funcionar.
+- [ ] Botão ao clicar no botão movimento terá um auto select do produto.
+- [ ] Auto incremento do No de registro.
+- [ ] Validação no Back-end.
+- [ ] DB que armezene o histórico de movimentação.
+- [ ] botão DETALHES para mostrar a descrição e o histórico.
 
 
-# CRIAÇÃO DA TABELA NO MYSQL
+## CRIAÇÃO DA TABELA NO MYSQL
 
 Em seu Banco de Dados no MYSQL, executar o seguinte comando para criar a tabela:
 
@@ -26,7 +26,7 @@ CREATE TABLE `produto` (
   PRIMARY KEY (`cod_registro`)
 );
 
-# CONFIGURAÇÃO CONEXÃO DO BANCO DE DADOS
+## CONFIGURAÇÃO CONEXÃO DO BANCO DE DADOS
 
 No arquivo app.py, preencher a configuração a seguir com os dados de seu bannco de dados:
 
@@ -35,7 +35,7 @@ app.config['MYSQL_DATABASE_USER'] = 'username'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
 app.config['MYSQL_DATABASE_DB'] = 'database'
 
-# INICIANDO O SERVIDOR
+## INICIANDO O SERVIDOR
 
 No prompt de comando, localize a pasta do projeto e digite o seguinte comando:
 
