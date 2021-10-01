@@ -1,38 +1,24 @@
-from flask import Flask, request, render_template, url_for, redirect, flash
-import json
-import pymysql
+from bson.objectid import ObjectId
+from flask import Flask, request, render_template, url_for, redirect, flash, jsonify
+from bson.json_util import dumps
+from pymongo import MongoClient
 from datetime import date
-from flaskext.mysql import MySQL
 
 
 app = Flask(__name__)
 app.secret_key = "secret key"
 
-mysql = MySQL()
 
-# Configurando MySQL
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1994'
-app.config['MYSQL_DATABASE_DB'] = 'mercadoria'
 
-mysql.init_app(app)
-
+# criando a base de dados
+client = MongoClient("localhost", 27017)
+db = client.test
 
 # rota home com lista de produtos
 @app.route('/pag_home')
 @app.route('/')
 def pag_home():
-    try:
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM produto")
-        rows = cursor.fetchall()
-    except:
-        return 'ERRO'
-    finally:
-        conn.close()
-        cursor.close()
+    estoque = db.estoque.find()
 
     return render_template('Home.html', rows=rows)
 
@@ -42,23 +28,18 @@ def pag_home():
 def cadastro():
     if request.method == 'POST':
         try:
-            nome = request.form['nome']
-            cod_registro = request.form['cod_registro']
-            fabricante = request.form['fabricante']
-            tipo = request.form['tipo'] 
-            descricao = request.form['descricao']
+            _json = request.form
+
+            produto = _json['produto']
+            fabricante = _json['fabricante']
+            tipo = _json['tipo'] 
+            descricao = _json['descricao']
             quantidade = '0'
 
-            insert = "INSERT INTO produto(cod_registro, nome, fabricante, tipo, quantidade, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
-            dados = (cod_registro, nome, fabricante, tipo, quantidade, descricao)
-
-            conn = mysql.connect()
-            cursor = conn.cursor()
-            cursor.execute(insert, dados)
-            conn.commit()
-
-            cursor.close()
-            conn.close()
+            insert = db.estoque.insert_one(
+                {'produto': produto, 'fabricante': fabricante, 
+                'tipo': tipo, 'descricao': descricao, 'quantidade': quantidade})
+            
 
             return redirect(url_for('pag_home'))
         
@@ -71,18 +52,9 @@ def cadastro():
 @app.route('/pag_estoque', methods=['GET', 'POST'])
 def selecione_produto():
     if request.method == 'GET':
-        try:
-            conn = mysql.connect()
-            cursor = conn.cursor(pymysql.cursors.DictCursor)
-            cursor.execute("SELECT * FROM produto")
-            rows = cursor.fetchall()
-        except:
-            return 'ERRO'
-        finally:
-            conn.close()
-            cursor.close()
+        estoque = db.estoque.find()
 
-        return render_template('Estoque.html', rows=rows)
+        return render_template('Estoque.html', rows=estoque)
     
     elif request.method == 'POST':
          
@@ -95,10 +67,12 @@ def movimento():
     if movimentacao == 'Entrada':
 
         try:
-            registro_qtd = request.form['registro']
-            quantidade = request.form['quantidade']
-            data_atualizacao = request.form['data']
-            local = request.form['local']
+            json = request.form
+
+            registro_qtd = json['registro']
+            quantidade = json['quantidade']
+            data_atualizacao = json['data']
+            local = json['local']
 
             cod_registro = registro_qtd.split(':')[0]
 
@@ -152,26 +126,10 @@ def movimento():
 
 @app.route('/delete/<id>', methods=['POST'])
 def delete(id):
+    mongo.db.estoque.delete_one({'id': ObjectId(id)})
+    resp = jsonify('Produto deletado do estoque com sucesso')
 
-    try:
-        conn = mysql.connect()
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM produto WHERE cod_registro=%s", (id))
-        conn.commit()
-
-        return redirect('/')
-
-    except Exception as e:
-        print(e)
-    
-    finally:
-        cursor.close() 
-        conn.close()
-
-
-
-
-
+    return resp
 
 
 

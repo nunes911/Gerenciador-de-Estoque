@@ -66,7 +66,7 @@
                     <select id="registro" class="form-select" name="registro" required>
                         <option selected disabled value="">Selecione</option>
                         {% for p in rows %}
-                            <option value="{{ p.cod_registro }}:{{ p.quantidade }}">{{ p.nome }}</option>
+                            <option value="{{ p._id }}:{{ p.quantidade }}">{{ p.produto }}</option>
                         {% endfor %}
                     </select>
                     </div>
